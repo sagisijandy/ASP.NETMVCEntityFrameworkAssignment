@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+	public ActionResult CalculateQuote(Insuree insuree)
+	{
+	decimal baseRate = 50;
+
+	if (insuree.Age <= 18)
+	{
+	baseRate += 100;
+	}
+	else if (insuree.Age >= 19 && insuree.Age <= 25)
+	{
+	baseRate += 50;
+	}
+	else
+	{
+	baseRate += 25;
+	}
+
+	if (insuree.CarYear < 2000)
+    {
+        baseRate += 25;
+    }
+    else if (insuree.CarYear > 2015)
+    {
+        baseRate += 25;
+    }
+
+    if (insuree.CarMake.ToLower() == "porsche")
+    {
+        baseRate += 25;
+
+        if (insuree.CarModel.ToLower() == "911 carrera")
+        {
+            baseRate += 25;
+        }
+    }
+
+    baseRate += insuree.SpeedingTickets * 10;
+
+    if (insuree.HasDUI)
+    {
+        baseRate *= 1.25m;
+    }
+
+    if (insuree.CoverageType == "Full")
+    {
+        baseRate *= 1.5m;
+    }
+
+    insuree.Quote = baseRate;
+
+    // Save insuree to database
+    db.Insurees.Add(insuree);
+    db.SaveChanges();
+
+    // Redirect to success page
+    return RedirectToAction("Success");
+}
+
+	
+</Project>
